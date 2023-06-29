@@ -250,9 +250,9 @@ def n_function(n_max_, coefficient_array_):
     return data_diff
 
 
-diff_data = n_function(100, coefficient_array)
-print(diff_data)
-plt.plot(diff_data)
+# diff_data = n_function(100, coefficient_array)
+# print(diff_data)
+# plt.plot(diff_data)
 
 # plt.show()
 
