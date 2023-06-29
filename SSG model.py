@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 # Define conditioning variables (U)
 # n should not exceed 150. Computational time increases as n and j increase, and |m_a1| decreases.
-n = 6
+n = 20
 j = 1
 m_a1 = 0
 
@@ -282,7 +282,7 @@ fig.subplots_adjust(hspace=.00)
 axs[0].plot(data[0], data[2], c="blue", label="QM")
 axs[0].plot(data[0], data[1], c="red", label='New Model')
 
-plot_title = "n=" + str(n) + r", j=" + str(j) + r", $m_{a1}$=" + str(m_a1) + "theta"
+plot_title = "n=" + str(n) + r", j=" + str(j) + r", $m_{a1}$=" + str(m_a1)
 
 
 np.save(plot_title + '.npy', data)
@@ -292,7 +292,7 @@ axs[0].set_ylim(-0.05, 1.05)
 axs[0].legend()
 
 axs[1].plot(data[0], data[3])
-axs[1].set(xlabel=r'$\theta_{ab}$ (radians)', ylabel=r'|$\Delta$|')
+axs[1].set(xlabel=r'$\theta$ (radians)', ylabel=r'|$\Delta$|')
 axs[1].set_xlim(0, math.pi)
 axs[1].set_ylim(-0.005, np.max(data[3])+.005)
 
