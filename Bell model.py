@@ -8,7 +8,7 @@ import time
 
 # Define conditioning variables (U)
 # n should not exceed 100. Computational time increases as n and j increase, and |m| decreases.
-n = 10
+n = 50
 
 j_1a = 1/2
 j_b2 = 1/2
