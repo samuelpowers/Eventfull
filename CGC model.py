@@ -1,4 +1,5 @@
-# This code is associated with the model presetened in the section "Entangled spin systems"
+# This code is associated with the model presented in the section "Entangled spin systems"
+
 
 import scipy.special
 import math
