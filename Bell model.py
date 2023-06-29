@@ -1,3 +1,5 @@
+# This code is associated with the model presented in the section "Bell Test"
+
 import scipy.special
 import math
 from math import factorial as mf
