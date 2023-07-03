@@ -89,7 +89,7 @@ def card_bob_vec(count_array_):
     return cardinality_bob, nu_0
 
 
-# Calculates the number of configurations of the symbols A and B in Alice's event
+# Calculates the number of configurations of the symbols A and B in Alice's event (G_{a1})
 def config_alice_ab(count_array_):
 
     A_a1 = count_array_[0] + count_array_[1]
@@ -98,7 +98,7 @@ def config_alice_ab(count_array_):
     return mf(A_a1 + B_a1)/(mf(A_a1)*mf(B_a1))
 
 
-# Calculates the number of configurations of the symbols A and B in Bob's event
+# Calculates the number of configurations of the symbols A and B in Bob's event (G_{b2})
 def config_bob_ab(count_array_):
 
     A_b2 = count_array_[0] + count_array_[2]
@@ -107,7 +107,7 @@ def config_bob_ab(count_array_):
     return mf(A_b2 + B_b2) / (mf(A_b2) * mf(B_b2))
 
 
-# Calculates the cardinality of Alice's and Bob's joint state space for a given set of local quantum numbers
+# Calculates the cardinality of Alice's and Bob's joint state space for a given set of local quantum numbers (|L^a||L^b|)
 def counter(n_, j_, m_a1_, m_b2_, l_a1_, l_b2_, B_map_, coefficient_array_):
     # Many of the unique combinations of quantum numbers being summed over in this function will not be valid.
     # This can be avoided by carefully considering the allowed ranges of the quantum numbers being summed over.
