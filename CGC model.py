@@ -25,7 +25,7 @@ m_12 = 0
 # Coefficient array calculated by Mathematica
 # Each row of the coefficient matrix is associated with a count (AA,AD,BB,BC,CB,CC,DA,DD)
 # Each column of the matrix is associated with a quantum number (n,j1a,m1a,jb2,mb2,j12,l12,DD)
-# We use DD rather than nu_0 in this program because its range is simpler to define (see counter function)
+# We use DD rather than nu_4 in this program because its range is simpler to define (see counter function)
 # nu_4 is then calculated within the cardinality functions for Alice's and Bob's elementary state spaces
 coefficient_array = np.asarray([[1/2, -1, 0, -1, 0, 0, 1, 1],
                                 [0, 0, 0, 1, -1, 0, 0, -1],
@@ -37,7 +37,7 @@ coefficient_array = np.asarray([[1/2, -1, 0, -1, 0, 0, 1, 1],
                                 [0, 0,0, 0, 0, 0, 0, 1]])
 
 
-# Calculates the cardinality of Alice's and Bob's elementary state spaces (\varepsilon).
+# Calculates the cardinality of Alice's and Bob's elementary state spaces (\varepsilon_a).
 # Also calculates nu_4
 def card_alice_vec(count_array_):
     nu_4 = (count_array_[:, 0] + count_array_[:, 3] + count_array_[:, 4] + count_array_[:, 7])/4
@@ -92,7 +92,7 @@ def card_bob_vec(count_array_):
 
     return cardinality_bob, nu_4
 
-
+# Calculates the number of congifurations of A's and B's in Alice's and Bob's events (G_{a1}, G_{b2})
 def config_alice_ab(count_array_):
 
     A_a1 = count_array_[0] + count_array_[1]
@@ -109,7 +109,7 @@ def config_bob_ab(count_array_):
     return mf(A_b2 + B_b2) / (mf(A_b2) * mf(B_b2))
 
 
-# Calculates the cardinality of Alice's and Bob's joint state space for a given set of local quantum numbers
+# Calculates the cardinality of Alice's and Bob's joint state space for a given set of local quantum numbers (|L^a||L^b|)
 def counter(n_, j_1a_, m_1a_, j_b2_, m_b2_, j_12_, l_12_, coefficient_array_):
     # Many of the unique combinations of quantum numbers being summed over in this function will not be valid.
     # This can be avoided by carefully considering the allowed ranges of the quantum numbers being summed over.
@@ -209,8 +209,7 @@ def prob_cgc(n_, j_1a_, j_b2_, j_12_, m_12_, coefficient_array_):
 
                 # Sum over the local nuisance variable
                 for a in range(len(l_12_range_)):
-
-                    # if l_12 is a nuisance variable, determine the number of local state space configurations
+                  
                     upsilon_array_[index_] += counter(n_, j_1a_, m_1a_range_[q], j_b2_, m_b2_range_[r], j_12_, l_12_range_[a], coefficient_array_)
                     cg = CG(S(2 * j_1a_) / 2, S(2 * m_1a_range_[q]) / 2, S(2 * j_b2_) / 2, S(2 * m_b2_range_[r]) / 2, S(2 * j_12_) / 2, S(2 * m_12_) / 2)
                     cg_array[index_] = float((cg.doit())**2)
