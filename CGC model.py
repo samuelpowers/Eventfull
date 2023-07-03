@@ -37,7 +37,7 @@ coefficient_array = np.asarray([[1/2, -1, 0, -1, 0, 0, 1, 1],
                                 [0, 0,0, 0, 0, 0, 0, 1]])
 
 
-# Calculates the cardinality of Alice's and Bob's elementary state spaces (\varepsilon_a).
+# Calculates the cardinality of Alice's and Bob's elementary state spaces (\varepsilon).
 # Also calculates nu_4
 def card_alice_vec(count_array_):
     nu_4 = (count_array_[:, 0] + count_array_[:, 3] + count_array_[:, 4] + count_array_[:, 7])/4
