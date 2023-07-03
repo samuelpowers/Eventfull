@@ -50,7 +50,7 @@ coefficient_array = np.asarray([[1/2, 0, -(1/2), 1/2, 0, 1/2, 1/2, 0, -(1/2), 0,
 
 
 # Calculates the cardinality of the ontic states in Alice's and Bob's sub-ensembles.
-# Also calculates mu
+# Also calculates non-local quantum numbers
 def card_alice_vec(count_array_):
     # The non-local quantum numbers
     k_1_ = (count_array_[:, 2] + count_array_[:, 5] + count_array_[:, 11] + count_array_[:, 12]) / 4
@@ -113,7 +113,7 @@ def card_bob_vec(count_array_):
     return cardinality_bob, k_1_, w_2_, nu_0_, nu_1_, nu_4_, nu_5_, k_1_ + w_2_ + nu_0_ + nu_1_ + nu_4_ + nu_5_
 
 
-# Calculates the number of configurations of the symbols A and B in Alice's event
+# Calculates the number of configurations of the symbols A and B in Alice's event (G_{a1})
 def config_alice_ab(count_array_):
 
     A_a1 = count_array_[0] + count_array_[1] + count_array_[2] + count_array_[3]
@@ -122,7 +122,7 @@ def config_alice_ab(count_array_):
     return mf(A_a1 + B_a1)/(mf(A_a1)*mf(B_a1))
 
 
-# Calculates the number of configurations of the symbols A and B in Bob's event
+# Calculates the number of configurations of the symbols A and B in Bob's event (G_{b2})
 def config_bob_ab(count_array_):
 
     A_b2 = count_array_[0] + count_array_[4] + count_array_[8] + count_array_[12]
@@ -131,7 +131,7 @@ def config_bob_ab(count_array_):
     return mf(A_b2 + B_b2) / (mf(A_b2) * mf(B_b2))
 
 
-# The elementary path counting procedure
+# The elementary path counting procedure (|L^a||L^b|)
 def path_counter(n_, j_1a_, m_1a_, l_1a_, j_b2_, m_b2_, l_b2_, alpha_map_, beta_map_, gamma_map_,  m_gamma_, coefficient_array_):
     # Many of the unique combinations of quantum numbers being summed over in this function will not be valid.
     # This can be avoided by carefully considering the allowed ranges of the quantum numbers being summed over.
@@ -159,7 +159,7 @@ def path_counter(n_, j_1a_, m_1a_, l_1a_, j_b2_, m_b2_, l_b2_, alpha_map_, beta_
 
     # Define the count array, which stores the counts associated with every complete set of quantum numbers
     count_array = []
-    # dd, bd, cb, db, cc, bc
+  
     # sum over non-local quantum numbers
     for ac in range(len(ac_range_)):
         for ad in range(len(ad_range_)):
@@ -208,8 +208,6 @@ def path_counter(n_, j_1a_, m_1a_, l_1a_, j_b2_, m_b2_, l_b2_, alpha_map_, beta_
             for v in range(len(count_array_groomed)):
                 # Apply m_gamma constraint
                 check_a = m_gamma_ == n_/4 + m_1a_/2 - l_1a_/2 - 2*(2*phi_alice_[2][v]+phi_alice_[3][v]+phi_alice_[4][v]-phi_alice_[5][v]-phi_alice_[6][v])
-                check_b = m_gamma_ == -n_/4 + m_b2_/2 + l_b2_/2 + alpha_map_/2 - gamma_map_/2 +4*phi_alice_[1][v] - 2*phi_alice_[3][v] + 2*phi_alice_[4][v] + 2*phi_alice_[5][v] - 2*phi_alice_[6][v]
-                check_c = m_gamma_ == -l_1a_/2 + l_b2_/2 + alpha_map_/2 - gamma_map_/4 + 2*phi_alice_[1][v] - 2*phi_alice_[2][v] - 2*phi_alice_[3][v] + 2*phi_alice_[5][v] - 2*phi_alice_[6][v]
 
                 if check_a:
                     alice_local_state_space += phi_alice_[0][v]*(-1)**(abs(phi_alice_[7][0]-phi_alice_[7][v]))
@@ -220,6 +218,7 @@ def path_counter(n_, j_1a_, m_1a_, l_1a_, j_b2_, m_b2_, l_b2_, alpha_map_, beta_
     return alice_local_state_space*bob_local_state_space*alice_config*bob_config
 
 
+# Calculates the probability as a function of theta (alpha_map)
 def prob(n_, j_1a_, j_b2_, alpha_map_, gamma_map_,  m_gamma_, coefficient_array_):
     m_1a_range = np.arange(-j_1a_, j_1a_ + 1)
     m_b2_range = np.arange(-j_b2_, j_b2_ + 1)
@@ -249,20 +248,18 @@ def prob(n_, j_1a_, j_b2_, alpha_map_, gamma_map_,  m_gamma_, coefficient_array_
 
 
 # Calculates the probability distribution as a function of theta_ab in the new model
-def prob_ssg(n_, j_1a_, j_b2_, gamma_map_, m_gamma_, coefficient_array_, x_):
+def prob_rot(n_, j_1a_, j_b2_, gamma_map_, m_gamma_, coefficient_array_, x_):
     # Define arrays that will store data
     probability_data = []
-    wigner_data = []
     theta_data = []
-    diff_data = []
 
-    # Initialize b_map at 0
-    # b_map is proportional to theta_ab
+    # Initialize alpha_map at 0
+    # alpha_map is proportional to theta_ab
     alpha_map_ = 0
     labels = prob(n_, j_1a_, j_b2_, alpha_map_, gamma_map_,  m_gamma_, coefficient_array_)[1]
     # Sum over all values of b_map, from 0 to n
     while alpha_map_ <= n_:
-        # Print the current value of b_map/n so the user can track progress
+        # Print the current value of alpha_map/n so the user can track progress
         print("alpha_map_= ", alpha_map_, "/", n)
 
         theta = math.pi * alpha_map_ / n_ - x_ * math.sin(2 * math.pi * alpha_map_ / n_)
@@ -271,7 +268,7 @@ def prob_ssg(n_, j_1a_, j_b2_, gamma_map_, m_gamma_, coefficient_array_, x_):
         theta_data.append(theta)
 
         alpha_map_ += 1
-    return theta_data, probability_data, wigner_data, diff_data, labels
+    return theta_data, probability_data, labels
 
 
 # Calculates the expectation values used for the CHSH calculation
@@ -319,30 +316,27 @@ def chsh_calc(n_, angle_a_, angle_ap_, angle_b_, angle_bp_, x_, coefficient_arra
     return abs(x_ab - x_abp + x_apb + x_apbp)
 
 
-# Execute the calculation and store the data for plotting
-
+# Get results for a single choice of theta
 # data = prob(n, j_1a, j_b2, alpha_map, 2*j_gamma,  m_gamma, coefficient_array)
 # for y in range(len(data[0])):
 #     print(data[1][y], ": ", data[0][y])
 
-# rot_data = prob_ssg(n, j_1a, j_b2, 2 * j_gamma, m_gamma, coefficient_array, x)
-# np.save('spin one half 11.npy', rot_data)
 
+# Get results for a full range of theta (can be slow for large n and or j)
+# rot_data = prob_rot(n, j_1a, j_b2, 2 * j_gamma, m_gamma, coefficient_array, x)
+# np.save('spin one half 11.npy', rot_data)
 # plt.plot(rot_data[0], rot_data[1])
-# plt.legend(rot_data[4])
+# plt.legend(rot_data[2])
 # plt.show()
 
+
 # Perform CHSH calculation
-
-
-
-
 chsh = chsh_calc(n,  0, 90, 45, 135, x, coefficient_array)
 print("chsh: ", abs(chsh))
 
-chsh_n_data = []
-n_index = 1
-
+# Get results of CHSH calculation for a range of n. 
+# chsh_n_data = []
+# n_index = 1
 # while n_index < n + 1:
 #     chsh_n_data.append([n_index, chsh_calc(n_index, 0, 90, 45, 135, x, coefficient_array)])
 #     print(n_index)
@@ -350,17 +344,6 @@ n_index = 1
 
 # np.save('n_max=100 CHSH Data prime.npy', chsh_n_data)
 # plt.scatter([arr[0] for arr in chsh_n_data], [arr[1] for arr in chsh_n_data])
-# plt.show()
-
-# x_run = -.5
-# s_array = []
-# while x_run <= 0.5:
-#     s_array.append([x_run, chsh_calc(n, 0, 90, 45, 135, x_run, coefficient_array)])
-#     x_run += .01
-#     print(x_run)
-
-# plt.scatter([arr[0] for arr in s_array], [arr[1] for arr in s_array])
-# plt.plot([-.5, .5], [2*math.sqrt(2), 2*math.sqrt(2)])
 # plt.show()
 
 print(time.clock())
